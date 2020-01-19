@@ -11,7 +11,6 @@ class Continents extends React.Component {
     };
 
     componentDidMount(){
-
         new ApolloClient({
             uri: 'https://countries.trevorblades.com'
         }).query({
@@ -32,51 +31,24 @@ class Continents extends React.Component {
                 }
             `
         }).then(result => {
-            const {continents} = result.data;
-            const dataNew = [...continents];
-            dataNew.map((item) => {
-                item["show"] = true;
-        });
-
             this.setState({
-                data: dataNew,
+                data: result.data.continents,
             })
         });
     }
-    hide = item => {
-        if(!item){ return }
-        item.show = false;
-        let array = Object.values(item).find(item => Array.isArray(item));
 
-        if(array){
-            array.map(value => {
-                this.hide(value)
-            })
-        }
-    };
-
-    handleClickLastLeaf = id => {
-        console.log("handleClickLastLeaf", id)
-        const { data } = this.state;
-        const dataNew = [...data];
-        let next = Object.values(dataNew[id]).find(item => Array.isArray(item));
-        next.map(item => {
-             this.hide(item)
-        })
-
-
-        this.setState({ data: dataNew })
-    };
 
     render() {
         const { data } = this.state;
-        console.log(data);
+
+
         if(data.length === 0){return null;}
+
 
         return (
             <div className="continents">
                 <div className="container">
-                    <ItemsList data={data} handleClickLastLeaf={this.handleClickLastLeaf} />
+                    <ItemsList data={data}/>
                 </div>
             </div>
         );

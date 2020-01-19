@@ -5,21 +5,17 @@ class Item extends React.Component {
 
     constructor (props){
         super(props);
-        this.state = { showChild: false };
+        this.state = { showChild: props.showChildren };
     }
 
     handleCollapse = () => {
         this.setState({ showChild: !this.state.showChild});
     };
 
-    handleCloseAll = () => {
-        console.log('click1')
-    };
-
     render(){
 
         const { showChild } = this.state;
-        const { item } = this.props;
+        const { item, depth } = this.props;
         let childrenArr = Object.values(item).find(arr => Array.isArray(arr));
 
         return (
@@ -30,10 +26,10 @@ class Item extends React.Component {
                         <button type='button' onClick={this.handleCollapse}>
                             {item.name ? item.name : item.code}
                         </button>
-                        { showChild && <ItemsList data={childrenArr} /> }
+                        <ItemsList data={childrenArr} depth={depth} />
                     </>
                     :
-                    <button type='button' onClick={this.handleCloseAll}>
+                    <button type='button' onClick={this.props.handleCloseAll}>
                         {item.name ? item.name : item.code}
                     </button>
                 }
