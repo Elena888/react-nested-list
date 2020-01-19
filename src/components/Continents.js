@@ -1,7 +1,9 @@
 import React from 'react';
-import ItemsList from './ItemsList'
 import ApolloClient from 'apollo-boost';
 import gql from 'graphql-tag';
+
+import ItemsList from './ItemsList'
+import { ThemeContext, showChildren } from '../theme-context';
 
 class Continents extends React.Component {
     state = {
@@ -35,14 +37,28 @@ class Continents extends React.Component {
         });
     }
 
+
     render() {
         const { data } = this.state;
-        console.log('data', data)
+
+        console.log('data', data);
         return (
             <div className="continents">
                 <div className="container">
                     <h1>Continents</h1>
-                    <ItemsList data={data} />
+                    {
+                      data.length > 0 &&  data.map(item => {
+                            let children = Object.values(item).find(item => Array.isArray(item));
+                            return(
+                                <>
+                                    <li>{item.name}</li>
+                                    <ItemsList data={children} />
+                                </>
+                            )
+                        })
+                    }
+
+
                 </div>
             </div>
         );

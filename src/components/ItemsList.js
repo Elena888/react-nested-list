@@ -1,29 +1,54 @@
 import React from 'react'
-import Item from './Item'
 
 class ItemsList extends React.Component{
     state = {
-        showChildren: true,
+        visible: false,
     };
 
-    handleCloseAll = () => {
-        this.setState({
-            showChildren: false
-        })
+    toggle = () => {
+        this.setState({visible: !this.state.visible});
     };
 
     render() {
-        const { showChildren } = this.state;
-        const { data } = this.props;
-        const Li = data.map((item) => {
-            return (
-                <li key={`${item.name}_${item.code}`}>
-                    <Item item={item} showChildren={showChildren} handleCloseAll={this.handleCloseAll} />
-                </li>
-            )
-        });
-        return (
-            <ul>{Li}</ul>
+        const {data} = this.props;
+
+        let childNodes = null;
+
+        if (data.length > 0) {
+            data.map((item) => {
+                let next = Object.values(item).find(item => Array.isArray(item));
+                if (next != null) {
+                    childNodes = next.map(function (node, index) {
+                        return (
+                            <li key={index}>
+                                <button>{node.name}</button>
+                                <ItemsList data={node}/>
+                            </li>
+                        )
+                    });
+
+                }
+            })
+        }
+
+
+        let style;
+        if (!this.state.visible) {
+            style = {display: "none"};
+        }
+console.log('-', data)
+
+        return(
+            <div>
+                <h5 onClick={this.toggle} >
+                    {data.name}
+                </h5>
+                <ul style={style}>
+                    {childNodes}
+                </ul>
+            </div>
+
+
         )
     }
 }
