@@ -1,30 +1,16 @@
 import React from 'react'
-import ItemsList from './ItemsList'
 
-class Item extends React.Component {
+const Item = (props) => {
 
-    constructor (props){
-        super(props);
-        this.state = { showChild: props.showChildren };
-    }
+    const {item, toggle, continentIndex} = props;
+    let name = item.name ? item.name : item.code;
 
-    handleCollapse = () => {
-        this.setState({ showChild: !this.state.showChild});
-    };
-
-    render(){
-
-
-        const { item, toggle,continentIndex } = this.props;
-        let name = item.name ? item.name : item.code;
-
-        return (
-            <div>
+    return (
+        <div>
             {item.show ? <span
                 onClick={() => toggle(item, continentIndex)}>{name}</span> : null}
-            </div>
+        </div>
     )
-    };
 }
 
 export default Item;

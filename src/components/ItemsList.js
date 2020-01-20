@@ -12,7 +12,7 @@ class ItemsList extends React.Component {
             return null;
         }
 
-        const {toggle, contientIndex} = this.props;
+        const {toggle, continentIndex} = this.props;
         let next = Object.values(item).find(item => Array.isArray(item));
 
         let type = item.__typename;
@@ -21,7 +21,7 @@ class ItemsList extends React.Component {
             <ul key={item.name + '-' + type}>
                 {
                     <li>
-                        <Item item={item} toggle={toggle} continentIndex={contientIndex} />
+                        <Item item={item} toggle={toggle} continentIndex={continentIndex} />
                         {
                             next && next.length > 0 && next.map(item => {
                                 return this.renderItem(item)
@@ -36,7 +36,7 @@ class ItemsList extends React.Component {
 
     render() {
         const {data} = this.props;
-        //  console.log('contientIndex', this.props.data)
+        //  console.log('continentIndex', this.props.data)
         return (
             this.renderItem(data)
 

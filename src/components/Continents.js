@@ -56,7 +56,7 @@ class Continents extends React.Component {
         }
     };
 
-    toggle = (item, contientIndex) => {
+    toggle = (item, continentIndex) => {
 
         const { data } = this.state;
         const dataNew = [...data];
@@ -77,9 +77,9 @@ class Continents extends React.Component {
                 }
             });
         }else{
-            this.closeNode(contientIndex)
+            this.closeNode(continentIndex)
         }
-        console.log('dataNew[contientIndex]', dataNew[contientIndex]);
+        console.log('dataNew[contientIndex]', dataNew[continentIndex]);
 
         // Object.assign(dataNew[contientIndex], next)
         //
@@ -112,7 +112,7 @@ class Continents extends React.Component {
                     {
                         data.map((item, index) => {
                             console.log("render", index);
-                            return <ItemsList data={item} contientIndex={index} toggle={this.toggle}/>
+                            return <ItemsList data={item} continentIndex={index} toggle={this.toggle}/>
                         })
                     }
 
