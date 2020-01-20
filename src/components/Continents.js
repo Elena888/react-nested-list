@@ -36,13 +36,14 @@ class Continents extends React.Component {
             const dataNew = [...continents];
             dataNew.map((item) => {
                 item["show"] = true;
-        });
+            });
 
             this.setState({
                 data: dataNew,
             })
         });
     }
+
     hide = item => {
         if(!item){ return }
         item.show = false;
@@ -55,28 +56,66 @@ class Continents extends React.Component {
         }
     };
 
-    handleClickLastLeaf = id => {
-        console.log("handleClickLastLeaf", id)
+    toggle = (item, contientIndex) => {
+
+        const { data } = this.state;
+        const dataNew = [...data];
+
+        console.log("toggle",item);
+        console.log("toggle",dataNew);
+
+
+        let next = Object.values(item).find(item => Array.isArray(item));
+        if(next){
+            next.map(item => {
+                if(item['show']){
+                    this.hide(item)
+
+                }else{
+                    item["show"] = true;
+
+                }
+            });
+        }else{
+            this.closeNode(contientIndex)
+        }
+        console.log('dataNew[contientIndex]', dataNew[contientIndex]);
+
+        // Object.assign(dataNew[contientIndex], next)
+        //
+        // this.setState({data: dataNew})
+        this.forceUpdate();
+    };
+
+
+    closeNode = id => {
+        console.log("closeNode", id)
         const { data } = this.state;
         const dataNew = [...data];
         let next = Object.values(dataNew[id]).find(item => Array.isArray(item));
         next.map(item => {
              this.hide(item)
-        })
+        });
 
 
-        this.setState({ data: dataNew })
+       // this.setState(this.state)
     };
 
     render() {
         const { data } = this.state;
-        console.log(data);
+        console.log("render",data);
         if(data.length === 0){return null;}
 
         return (
             <div className="continents">
                 <div className="container">
-                    <ItemsList data={data} handleClickLastLeaf={this.handleClickLastLeaf} />
+                    {
+                        data.map((item, index) => {
+                            console.log("render", index);
+                            return <ItemsList data={item} contientIndex={index} toggle={this.toggle}/>
+                        })
+                    }
+
                 </div>
             </div>
         );

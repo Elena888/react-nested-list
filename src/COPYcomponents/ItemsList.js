@@ -120,6 +120,8 @@ class ItemsList extends React.Component {
     render() {
         const {data} = this.state;
 
+
+
         return <div>
             {data.map((node, idx) => {
 

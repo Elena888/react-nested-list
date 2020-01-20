@@ -1,71 +1,33 @@
 import React from 'react'
 
-class ItemsList extends React.Component{
-    constructor(props){
+class ItemsList extends React.Component {
+    constructor(props) {
         super(props);
-        this.state = { data: props.data };
     }
 
-    hide = item => {
-        if(!item){ return }
-        item.show = false;
-        let array = Object.values(item).find(item => Array.isArray(item));
 
-        if(array){
-            array.map(value => {
-                this.hide(value)
-            })
+    renderItem = (item) => {
+        if (!item) {
+            return null;
         }
-    };
 
-    handleClick = (e, item) => {
-        //console.log(item);
-
-        const dataNew = {...item};
-
-        let next = Object.values(dataNew).find(item => Array.isArray(item));
-        if(next){
-            next.map(item => {
-                if(item['show']){
-                    item["show"] = false;
-
-                }else{
-                    item["show"] = true;
-
-                }
-            });
-        }
-        console.log('dataNew', dataNew);
-        this.setState(this.state)
-    };
-
-    handleClickLastLeaf =(e, id) => {
-        this.props.handleClickLastLeaf(id)
-    };
-
-    renderItem = (item, continentIndex) => {
-
-        const {handleClickLastLeaf} = this.props;
+        const {toggle, contientIndex} = this.props;
         let next = Object.values(item).find(item => Array.isArray(item));
         let name = item.name ? item.name : item.code;
         let type = item.__typename;
 
-        return(
+        return (
             <ul key={name + '-' + type}>
-                {item.show &&
-                <li>
-                    {next ?
-                        <React.Fragment>
-                            <span onClick={(e) => this.handleClick(e, item)}>{name}</span>
-
-                            <ItemsList data={next} handleClickLastLeaf={handleClickLastLeaf}/>
-                        </React.Fragment>
-                        :
-
-                        <span onClick={(e) => this.handleClickLastLeaf(e, continentIndex)}>{name}</span>
-
-                    }
-                </li>
+                {
+                    <li>
+                        {item.show ? <span
+                            onClick={() => toggle(item, contientIndex)}>{name}</span> : null}
+                        {
+                            next && next.length > 0 && next.map(item => {
+                                return <ItemsList data={item} contientIndex={contientIndex} toggle={toggle}/>
+                            })
+                        }
+                    </li>
                 }
             </ul>
         )
@@ -73,13 +35,11 @@ class ItemsList extends React.Component{
     };
 
     render() {
-        const {data} = this.state;
+        const {data} = this.props;
+        //  console.log('contientIndex', this.props.data)
+        return (
+            this.renderItem(data)
 
-        return(
-            data.map((item, index) => {
-                console.log("render",index)
-                return this.renderItem(item, index)
-            })
         )
     }
 }
