@@ -1,4 +1,5 @@
 import React from 'react'
+import Item from './Item'
 
 class ItemsList extends React.Component {
     constructor(props) {
@@ -13,18 +14,17 @@ class ItemsList extends React.Component {
 
         const {toggle, contientIndex} = this.props;
         let next = Object.values(item).find(item => Array.isArray(item));
-        let name = item.name ? item.name : item.code;
+
         let type = item.__typename;
 
         return (
-            <ul key={name + '-' + type}>
+            <ul key={item.name + '-' + type}>
                 {
                     <li>
-                        {item.show ? <span
-                            onClick={() => toggle(item, contientIndex)}>{name}</span> : null}
+                        <Item item={item} toggle={toggle} continentIndex={contientIndex} />
                         {
                             next && next.length > 0 && next.map(item => {
-                                return <ItemsList data={item} contientIndex={contientIndex} toggle={toggle}/>
+                                return this.renderItem(item)
                             })
                         }
                     </li>

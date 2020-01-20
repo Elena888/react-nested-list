@@ -14,27 +14,16 @@ class Item extends React.Component {
 
     render(){
 
-        const { showChild } = this.state;
-        const { item, depth } = this.props;
-        let childrenArr = Object.values(item).find(arr => Array.isArray(arr));
+
+        const { item, toggle,continentIndex } = this.props;
+        let name = item.name ? item.name : item.code;
 
         return (
-            <>
-                { childrenArr && childrenArr.length > 0
-                    ?
-                    <>
-                        <button type='button' onClick={this.handleCollapse}>
-                            {item.name ? item.name : item.code}
-                        </button>
-                        <ItemsList data={childrenArr} depth={depth} />
-                    </>
-                    :
-                    <button type='button' onClick={this.props.handleCloseAll}>
-                        {item.name ? item.name : item.code}
-                    </button>
-                }
-            </>
-        )
+            <div>
+            {item.show ? <span
+                onClick={() => toggle(item, continentIndex)}>{name}</span> : null}
+            </div>
+    )
     };
 }
 
