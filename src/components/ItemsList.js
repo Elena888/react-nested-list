@@ -1,47 +1,35 @@
 import React from 'react'
 import Item from './Item'
 
-class ItemsList extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+const ItemsList = ({ data }) => {
 
-
-    renderItem = (item) => {
+    const renderItem = (item) => {
         if (!item) {
             return null;
         }
-
-        const {toggle, continentIndex} = this.props;
-        let next = Object.values(item).find(item => Array.isArray(item));
-
-        let type = item.__typename;
+        const childrenArr = Object.values(item).find(item => Array.isArray(item));
+        const key = `${item.name}_${item.__typename}`;
 
         return (
-            <ul key={item.name + '-' + type}>
-                {
-                    <li>
-                        <Item item={item} toggle={toggle} continentIndex={continentIndex} />
-                        {
-                            next && next.length > 0 && next.map(item => {
-                                return this.renderItem(item)
+            <li key={key}>
+                <Item item={item} />
+                {childrenArr && childrenArr.length > 0 &&
+                    <ul>
+                        {childrenArr.map(item => {
+                            return renderItem(item)
                             })
                         }
-                    </li>
+                    </ul>
                 }
-            </ul>
+            </li>
         )
-
     };
 
-    render() {
-        const {data} = this.props;
-        //  console.log('continentIndex', this.props.data)
-        return (
-            this.renderItem(data)
-
-        )
-    }
-}
+    return (
+        <ul>
+            {renderItem(data)}
+        </ul>
+    )
+};
 
 export default ItemsList;

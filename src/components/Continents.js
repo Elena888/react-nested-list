@@ -2,8 +2,8 @@ import React from 'react';
 import ApolloClient from 'apollo-boost';
 import gql from 'graphql-tag';
 
-import ItemsList from './ItemsList'
-import { ThemeContext, showChildren } from '../theme-context';
+import ItemsList from './ItemsList';
+import { ContinentsProvider } from '../context'
 
 class Continents extends React.Component {
     state = {
@@ -11,7 +11,6 @@ class Continents extends React.Component {
     };
 
     componentDidMount(){
-
         new ApolloClient({
             uri: 'https://countries.trevorblades.com'
         }).query({
@@ -35,7 +34,7 @@ class Continents extends React.Component {
             const {continents} = result.data;
             const dataNew = [...continents];
             dataNew.map((item) => {
-                item["show"] = true;
+                return item["show"] = true;
             });
 
             this.setState({
@@ -47,75 +46,63 @@ class Continents extends React.Component {
     hide = item => {
         if(!item){ return }
         item.show = false;
-        let array = Object.values(item).find(item => Array.isArray(item));
 
+        const array = Object.values(item).find(item => Array.isArray(item));
         if(array){
             array.map(value => {
-                this.hide(value)
+                return this.hide(value)
             })
         }
     };
 
-    toggle = (item, continentIndex) => {
-
-        const { data } = this.state;
-        const dataNew = [...data];
-
-        console.log("toggle",item);
-        console.log("toggle",dataNew);
-
-
-        let next = Object.values(item).find(item => Array.isArray(item));
-        if(next){
-            next.map(item => {
+    toggle = (item, continentIndex) => () => {
+        const array = Object.values(item).find(item => Array.isArray(item));
+        if(array && array.length > 0){
+            array.map(item => {
                 if(item['show']){
-                    this.hide(item)
-
+                    return this.hide(item)
                 }else{
-                    item["show"] = true;
-
+                    return item["show"] = true;
                 }
             });
+            this.forceUpdate();
         }else{
             this.closeNode(continentIndex)
         }
-        console.log('dataNew[contientIndex]', dataNew[continentIndex]);
-
-        // Object.assign(dataNew[contientIndex], next)
-        //
-        // this.setState({data: dataNew})
-        this.forceUpdate();
     };
 
-
-    closeNode = id => {
-        console.log("closeNode", id)
+    closeNode = index => {
         const { data } = this.state;
         const dataNew = [...data];
-        let next = Object.values(dataNew[id]).find(item => Array.isArray(item));
-        next.map(item => {
-             this.hide(item)
+        const array = Object.values(dataNew[index]).find(item => Array.isArray(item));
+        array.map(item => {
+             return this.hide(item)
         });
 
-
-       // this.setState(this.state)
+        this.setState({data: dataNew})
     };
 
     render() {
         const { data } = this.state;
-        console.log("render",data);
-        if(data.length === 0){return null;}
 
         return (
             <div className="continents">
                 <div className="container">
                     {
-                        data.map((item, index) => {
-                            console.log("render", index);
-                            return <ItemsList data={item} continentIndex={index} toggle={this.toggle}/>
+                        data.length > 0 && data.map((item, index) => {
+                            return(
+                                <ContinentsProvider key={index} value={
+                                        {
+                                            index,
+                                            action: this.toggle
+                                        }
+                                    }
+                                >
+                                    <ItemsList data={item} />
+                                </ContinentsProvider>
+                            )
                         })
                     }
-
                 </div>
             </div>
         );

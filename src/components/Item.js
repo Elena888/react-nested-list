@@ -1,16 +1,20 @@
 import React from 'react'
+import { ContinentsConsumer } from '../context'
 
-const Item = (props) => {
-
-    const {item, toggle, continentIndex} = props;
-    let name = item.name ? item.name : item.code;
+const Item = ({ item }) => {
+    const name = item.name ? item.name : item.code;
 
     return (
-        <div>
-            {item.show ? <span
-                onClick={() => toggle(item, continentIndex)}>{name}</span> : null}
-        </div>
+        <ContinentsConsumer>
+            {
+                ({ index, action }) => {
+                    return (
+                        item.show && <button type='button' onClick={action(item, index)}>{name}</button>
+                    )
+                }
+            }
+        </ContinentsConsumer>
     )
-}
+};
 
 export default Item;
