@@ -34,7 +34,7 @@ class Continents extends React.Component {
             const {continents} = result.data;
             const dataNew = [...continents];
             dataNew.map((item) => {
-                return item["show"] = true;
+                return item.show = true;
             });
 
             this.setState({
@@ -59,10 +59,10 @@ class Continents extends React.Component {
         const array = Object.values(item).find(item => Array.isArray(item));
         if(array && array.length > 0){
             array.map(item => {
-                if(item['show']){
+                if(item.show){
                     return this.hide(item)
                 }else{
-                    return item["show"] = true;
+                    return item.show = true;
                 }
             });
             this.forceUpdate();
