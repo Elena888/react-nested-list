@@ -14,12 +14,12 @@ const ContinentsList = ({data}) => {
 
     return (
         <ContinentsProvider value={{closeNode: showChildren}}>
-            <div>
-                <h3 onClick={showChildren}>{data.name}</h3>
+            <li>
+                <button onClick={showChildren}>{data.name}</button>
                 {
                     show &&  array && <ItemsList data={array} />
                 }
-            </div>
+            </li>
         </ContinentsProvider>
     )
 };

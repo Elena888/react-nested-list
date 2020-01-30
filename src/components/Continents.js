@@ -30,7 +30,7 @@ const Continents = () => {
        }).then(result => {
            setData( result.data.continents )
        });
-   }, [data]);
+   }, []);
 
     return (
         <div className="continents">
